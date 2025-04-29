@@ -52,3 +52,15 @@ LLM提供的Api接口参数，提供模型调用外部函数的能力
 
 - CountDownLatch
 - Condition
+
+## 线程池
+
+- 核心Thread 阻塞去读blockqueue中的Runnable task，然后执行
+- 非核心Thread poll 定时读，如果一段时间没读到就结束
+- 因此参数有：
+  - CoreSize
+  - MaxSize
+  - TimeOut
+  - TimeUnit
+  - BlockQueue
+  - RejectHandle

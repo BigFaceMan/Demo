@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
+    static final Object obLock = new Object();
     static  MyLock lock = new SpinLock();
     public static long Test() throws InterruptedException {
+        obLock.wait();
         int[] count = new int[]{1000};
         List<Thread> threads = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
