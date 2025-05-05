@@ -83,3 +83,15 @@ LLM提供的Api接口参数，提供模型调用外部函数的能力
     - 如果队列是空没必要空转，将线程park，加入一个任务的时候再去唤醒线程
     - 注意虚假唤醒的情况，用while 来check，而不是用if 只check一次
 
+
+
+## miniSpring
+
+手写Spring，创建和使用对象，待完成
+
+## jvmTest
+
+虚拟机测试
+
+- 虚拟机文件结构, ClassFileStruct
+- 类加载, ClassLoaderTest
