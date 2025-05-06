@@ -1,12 +1,14 @@
 package ssp.miniSpring;
 
-import ssp.miniSpring.Utils.Cat;
+import ssp.miniSpring.DIClass.Cat;
 
 public class Main {
     public static void main(String[] args) throws Exception {
         ApplicationContext applicationContext = new ApplicationContext("ssp.miniSpring");
-        Cat cat = (Cat)applicationContext.getBean("Cat");
+        System.out.println(applicationContext.getBean("Cat"));
+        System.out.println(applicationContext.getBean("Dog"));
+//        Cat cat = (Cat)applicationContext.getBean("Cat");
 //        System.out.println(cat == null);
-        cat.sayHello();
+//        cat.sayHello();
     }
 }

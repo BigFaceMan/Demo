@@ -1,10 +1,12 @@
 package ssp.miniSpring;
 
 
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
+
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -15,38 +17,71 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ApplicationContext {
     private final HashMap<String, Object> ioc = new HashMap<>();
+    private final HashMap<String, BeanDefinition> beanDefinitionMap = new HashMap<>();
+    private final HashMap<String, Object> loadingMap = new HashMap<>();
+
     public ApplicationContext(String packageName) throws Exception {
         initContext(packageName);
     }
 
     private void initContext(String packageName) throws Exception {
 //        List<Class<?>> classList = scanPackage(packageName);
-        scanPackage(packageName).stream().filter(this::canCreate).forEach(this::doCreate);
+        scanPackage(packageName).stream().filter(this::canCreate).forEach(this::wrapper);
+        initBeanPostProcessor();
+        beanDefinitionMap.values().stream().forEach(this::createBean);
 //        for (Class cl : classList)
 //            System.out.println("get class : " + cl);
     }
 
-    private void doCreate(Class<?> cl){
-        String name = cl.getAnnotation(Component.class).name().equals("") ? cl.getSimpleName() : cl.getAnnotation(Component.class).name() ;
+    private void initBeanPostProcessor() {
 
-//        String name = cl.getSimpleName();
-//        System.out.println("put Object : " + name);
-//        System.out.println("get simpleName : " + cl.getSimpleName());
-//        System.out.println("get Annotation : " + cl.getDeclaredAnnotation(Component.class).name() == null);
-        Object ob = ioc.get(name);
-        if (ob == null) {
-            try {
-                ob = cl.getConstructor().newInstance();
-                ioc.put(name, ob);
-            } catch (Exception e) {
-                e.printStackTrace();
+    }
+    private void autowiredBean(Object ob, List<Field> autowiredFields) {
+        for (Field fd : autowiredFields) {
+            fd.setAccessible(true);
+            Object findBean = getBean(fd.getClass());
+            try  {
+                fd.set(ob, findBean);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
             }
         }
-//        return ob;
     }
+
+    protected Object createBean(BeanDefinition beanDefinition) {
+        String name = beanDefinition.getName();
+        if (name == null) return null;
+        if (ioc.containsKey(name)) return ioc.get(name);
+        if (loadingMap.containsKey(name)) return loadingMap.get(name);
+        return doCreate(beanDefinition);
+    }
+
+    protected BeanDefinition wrapper(Class<?> cl){
+        BeanDefinition beanDefinition = new BeanDefinition(cl);
+        if (beanDefinitionMap.containsKey(beanDefinition.getName())) {
+            throw new RuntimeException("Bean名字重复");
+        }
+        beanDefinitionMap.put(beanDefinition.getName(), beanDefinition);
+        return beanDefinition;
+    }
+    private Object doCreate(BeanDefinition beanDefinition){
+        Constructor<?> cs = beanDefinition.getConstructor();
+        Object instance = null;
+        try {
+            instance = cs.newInstance();
+            loadingMap.put(beanDefinition.getName(),  instance);
+            autowiredBean(instance, beanDefinition.getAutowiredFields());
+            ioc.put(beanDefinition.getName(), loadingMap.remove(beanDefinition.getName()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return instance;
+    }
+
     private boolean canCreate(Class<?> cl) {
         return cl.isAnnotationPresent(Component.class);
     }
@@ -76,16 +111,41 @@ public class ApplicationContext {
         return classList;
     }
     public Object getBean(String name) {
-        Object ob = ioc.get(name);
-        System.out.println(ioc);
+        Object ob = beanDefinitionMap.get(name);
+        System.out.println("beanDefinitionMap : " + beanDefinitionMap);
+        System.out.println("iocMap : " + ioc);
+        if (ob != null) {
+            if (ioc.get(name) == null) {
+                ob = createBean((BeanDefinition) ob);
+            } else {
+                ob = ioc.get(name);
+            }
+        }
         return ob;
     }
 
     public <T> T getBean(Class<T> beanType) {
+        BeanDefinition findBd = beanDefinitionMap.values().stream()
+                .filter(bd -> bd.getType().isAssignableFrom(beanType))
+                .findFirst()
+                .orElse(null);
+        if (findBd != null) {
+            return (T) getBean(findBd.getName());
+        }
         return null;
     }
 
     public <T> List<T> getBeans(Class<T> beanType) {
+        List<BeanDefinition> findBds = beanDefinitionMap.values().stream()
+                .filter(bd -> bd.getType().isAssignableFrom(beanType))
+                .collect(Collectors.toList());
+        List<T> beans = new ArrayList<>();
+        if (findBds != null) {
+            for (BeanDefinition findBd : findBds) {
+                beans.add((T) getBean(findBd.getName()));
+            }
+            return beans;
+        }
         return null;
     }
 }

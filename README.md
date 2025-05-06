@@ -87,7 +87,25 @@ LLM提供的Api接口参数，提供模型调用外部函数的能力
 
 ## miniSpring
 
-手写Spring，创建和使用对象，待完成
+**tag:  负责 造对象、拿对象**
+
+- 创建对象
+	- 识别带有@Component注解的对象
+- 依赖注入
+	- 识别带有@Autowired的字段
+	- 避免循环注入
+	- 对象创建分为两个部分
+		- new 一个对象
+		- 给需要注入的对象赋值
+		- 因此二级缓存防止循环依赖
+- 初始化后自动调用某些函数
+	- 识别实例中带有@PostConstruct的方法
+	- 针对于具体实例自动调用的方法
+- 生命周期函数
+	- 实现了BeanPostProcessor接口的类
+	- 先create这些类，然后别的类创建的时候，用这些类走一下初始化
+	- 分为beforeInitializeBean、afterInitializeBean两个待实现的方法
+	- 提供针对于所有方法的前置后置方法
 
 ## jvmTest
 
