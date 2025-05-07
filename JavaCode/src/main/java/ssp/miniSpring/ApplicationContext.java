@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -23,6 +24,7 @@ public class ApplicationContext {
     private final HashMap<String, Object> ioc = new HashMap<>();
     private final HashMap<String, BeanDefinition> beanDefinitionMap = new HashMap<>();
     private final HashMap<String, Object> loadingMap = new HashMap<>();
+    private final List<BeanPostProcessor> postProcessors = new ArrayList<>();
 
     public ApplicationContext(String packageName) throws Exception {
         initContext(packageName);
@@ -38,12 +40,39 @@ public class ApplicationContext {
     }
 
     private void initBeanPostProcessor() {
+        beanDefinitionMap.values().stream()
+                .filter(bd -> BeanPostProcessor.class.isAssignableFrom(bd.getType()))
+                .map(this::createBean)
+                .map(BeanPostProcessor.class::cast)
+                .forEach(postProcessors::add);
+    }
 
+    private Object initializeBean(Object bean, BeanDefinition beanDefinition) throws Exception {
+        for (BeanPostProcessor beanPostProcessor : postProcessors) {
+            bean = beanPostProcessor.beforeInitializeBean(bean, beanDefinition.getName());
+        }
+
+        Object finalBean = bean;
+        beanDefinition.getPostMethod().stream().forEach(bd -> {
+            try {
+                bd.invoke(finalBean);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            } catch (InvocationTargetException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        for (BeanPostProcessor beanPostProcessor : postProcessors) {
+            bean = beanPostProcessor.afterInitializeBean(bean, beanDefinition.getName());
+        }
+        return bean;
     }
     private void autowiredBean(Object ob, List<Field> autowiredFields) {
         for (Field fd : autowiredFields) {
             fd.setAccessible(true);
-            Object findBean = getBean(fd.getClass());
+            Object findBean = getBean(fd.getType());
+//            System.out.println("get bean : " + findBean);
             try  {
                 fd.set(ob, findBean);
             } catch (IllegalAccessException e) {
@@ -75,7 +104,18 @@ public class ApplicationContext {
             instance = cs.newInstance();
             loadingMap.put(beanDefinition.getName(),  instance);
             autowiredBean(instance, beanDefinition.getAutowiredFields());
+            initializeBean(instance, beanDefinition);
             ioc.put(beanDefinition.getName(), loadingMap.remove(beanDefinition.getName()));
+//            Object finalInstance = instance;
+//            beanDefinition.getPostMethod().stream().forEach(md -> {
+//                try {
+//                    md.invoke(finalInstance);
+//                } catch (IllegalAccessException e) {
+//                    throw new RuntimeException(e);
+//                } catch (InvocationTargetException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -112,8 +152,8 @@ public class ApplicationContext {
     }
     public Object getBean(String name) {
         Object ob = beanDefinitionMap.get(name);
-        System.out.println("beanDefinitionMap : " + beanDefinitionMap);
-        System.out.println("iocMap : " + ioc);
+//        System.out.println("beanDefinitionMap : " + beanDefinitionMap);
+//        System.out.println("iocMap : " + ioc);
         if (ob != null) {
             if (ioc.get(name) == null) {
                 ob = createBean((BeanDefinition) ob);
@@ -126,7 +166,7 @@ public class ApplicationContext {
 
     public <T> T getBean(Class<T> beanType) {
         BeanDefinition findBd = beanDefinitionMap.values().stream()
-                .filter(bd -> bd.getType().isAssignableFrom(beanType))
+                .filter(bd -> beanType.isAssignableFrom(bd.getType()))
                 .findFirst()
                 .orElse(null);
         if (findBd != null) {
@@ -137,7 +177,7 @@ public class ApplicationContext {
 
     public <T> List<T> getBeans(Class<T> beanType) {
         List<BeanDefinition> findBds = beanDefinitionMap.values().stream()
-                .filter(bd -> bd.getType().isAssignableFrom(beanType))
+                .filter(bd -> beanType.isAssignableFrom(bd.getType()))
                 .collect(Collectors.toList());
         List<T> beans = new ArrayList<>();
         if (findBds != null) {
