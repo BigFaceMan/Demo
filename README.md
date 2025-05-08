@@ -145,6 +145,34 @@ spring -> MVC
 
 
 
+## Aop
+
+面向切面编程
+
+- **Aspect**：切面，只是一个概念，没有具体的接口或类与之对应，是 Join point，Advice 和 Pointcut 的一个统称。
+
+  - 要实现的功能类
+
+- **Advice**：通知，即我们定义的一个切面中的横切逻辑，有“around”，“before”和“after”三种类型。在很多的 AOP 实现框架中，Advice 通常作为一个拦截器，也可以包含许多个拦截器作为一条链路围绕着 Join point 进行处理。
+
+  - 功能类中的方法
+
+- **Target object**：目标对象，就是被代理的对象。
+
+- **AOP proxy**：AOP 代理，指在 AOP 实现框架中**实现切面协议的对象**（代理对象）。在 Spring AOP 中有两种代理，分别是 JDK 动态代理和 CGLIB 动态代理。
+
+- **Join point**：连接点，指程序执行过程中的一个点，例如方法调用、异常处理等。在 Spring AOP 中，仅支持方法级别的连接点。
+
+  - **程序执行过程中的某个点，通常是函数调用**
+
+- **Pointcut**：切入点，用于匹配连接点，一个 AspectJ 中包含哪些 Join point 需要由 Pointcut 进行筛选。
+
+  - **对连接点的筛选**  具体执行的那个函数
+
+  
+
+  
+
 ## jvmTest
 
 虚拟机测试
