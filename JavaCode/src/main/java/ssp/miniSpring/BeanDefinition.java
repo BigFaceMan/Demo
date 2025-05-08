@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class BeanDefinition {
     private Constructor constructor;
-    private List<Method> postMethod = null;
+    private List<Method> postConstructMethod = null;
     private Class<?> type;
     private String name;
     private List<Field> autowiredFields = null;
@@ -19,16 +19,16 @@ public class BeanDefinition {
         try {
             this.constructor = cl.getConstructor();
             this.type = cl;
-            this.name = cl.getDeclaredAnnotation(Component.class).name().equals("") ? cl.getSimpleName() : cl.getDeclaredAnnotation(Component.class).name();
-//            System.out.println("Beandefinition name is : " + this.name);
-            this.autowiredFields = Arrays.stream(cl.getDeclaredFields()).filter(fd -> fd.isAnnotationPresent(Autowired.class)).collect(Collectors.toList());
-//            System.out.println("Autowired len : " + this.autowiredFields.size());
-            this.postMethod = Arrays.stream(cl.getDeclaredMethods())
+            this.name = cl.getDeclaredAnnotation(Component.class).name().isEmpty() ? cl.getSimpleName() : cl.getDeclaredAnnotation(Component.class).name();
+            this.autowiredFields = Arrays.stream(cl.getDeclaredFields())
+                    .filter(fd -> fd.isAnnotationPresent(Autowired.class))
+                    .collect(Collectors.toList());
+            this.postConstructMethod = Arrays.stream(cl.getDeclaredMethods())
                     .filter(md -> md.isAnnotationPresent(PostConstruct.class))
                     .collect(Collectors.toList());
-//            System.out.println("PostConstruct len : " + postMethod.size());
-        } catch(Exception e) {
-            e.printStackTrace();
+
+        } catch(NoSuchMethodException e) {
+            throw new RuntimeException(e);
         }
     }
     public Constructor getConstructor() {
@@ -44,7 +44,7 @@ public class BeanDefinition {
         return this.autowiredFields;
     }
 
-    public List<Method> getPostMethod() {
-        return postMethod;
+    public List<Method> getPostConstructMethod() {
+        return this.postConstructMethod;
     }
 }

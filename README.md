@@ -87,6 +87,10 @@ LLM提供的Api接口参数，提供模型调用外部函数的能力
 
 ## miniSpring
 
+
+
+### Srping
+
 **tag:  负责 造对象、拿对象**
 
 - 创建对象
@@ -106,6 +110,40 @@ LLM提供的Api接口参数，提供模型调用外部函数的能力
 	- 先create这些类，然后别的类创建的时候，用这些类走一下初始化
 	- 分为beforeInitializeBean、afterInitializeBean两个待实现的方法
 	- 提供针对于所有方法的前置后置方法
+
+### SpringMVC
+
+
+
+**一套自动注入的MVC框架**
+
+spring -> MVC
+
+- 自动注入一个服务器
+  - Tomcat web服务器，建立请求与servlet的对应关系
+  - 使用一个DispatcherServlet 匹配所有请求，在自己写的类内做路由    创建Servlet（名字与类映射） 、加入Mapping（名字与pattern映射）
+    - 建立 url 与 servlet（路由内是handler）的对应关系
+      - 加入BeanPostConstruct注解，在对象初始化后，将有Controller注解的对象都解析其有没有Handler
+      - 如果有RequestMapping，则该方法是一个Handdler，
+      - WebHandler 存储 与handler 相关的信息，method、resulteTyep
+      - 使用map来存储 pattern 和 webHandler的对应关系
+- 接收请求
+  - 处理参数
+    - 将req中的参数 变成 mothod 需要的参数
+    - 解析method的parameter的注解的名字
+- 处理请求
+  - 使用invoke调用
+- 返回数据
+  - 根据resulteType来处理handler的返回类型
+    - JSON
+      - 有@ResponseBody注解得到
+    - LOCAL
+      - 本地资源
+      - 用ModelAndView 动态渲染
+    - HTML
+      - 字符串
+
+
 
 ## jvmTest
 

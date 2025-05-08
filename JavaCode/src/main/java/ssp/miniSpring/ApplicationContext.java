@@ -31,12 +31,9 @@ public class ApplicationContext {
     }
 
     private void initContext(String packageName) throws Exception {
-//        List<Class<?>> classList = scanPackage(packageName);
         scanPackage(packageName).stream().filter(this::canCreate).forEach(this::wrapper);
         initBeanPostProcessor();
-        beanDefinitionMap.values().stream().forEach(this::createBean);
-//        for (Class cl : classList)
-//            System.out.println("get class : " + cl);
+        beanDefinitionMap.values().forEach(this::createBean);
     }
 
     private void initBeanPostProcessor() {
@@ -53,7 +50,7 @@ public class ApplicationContext {
         }
 
         Object finalBean = bean;
-        beanDefinition.getPostMethod().stream().forEach(bd -> {
+        beanDefinition.getPostConstructMethod().stream().forEach(bd -> {
             try {
                 bd.invoke(finalBean);
             } catch (IllegalAccessException e) {
@@ -72,7 +69,6 @@ public class ApplicationContext {
         for (Field fd : autowiredFields) {
             fd.setAccessible(true);
             Object findBean = getBean(fd.getType());
-//            System.out.println("get bean : " + findBean);
             try  {
                 fd.set(ob, findBean);
             } catch (IllegalAccessException e) {
@@ -83,7 +79,6 @@ public class ApplicationContext {
 
     protected Object createBean(BeanDefinition beanDefinition) {
         String name = beanDefinition.getName();
-        if (name == null) return null;
         if (ioc.containsKey(name)) return ioc.get(name);
         if (loadingMap.containsKey(name)) return loadingMap.get(name);
         return doCreate(beanDefinition);
@@ -106,16 +101,6 @@ public class ApplicationContext {
             autowiredBean(instance, beanDefinition.getAutowiredFields());
             initializeBean(instance, beanDefinition);
             ioc.put(beanDefinition.getName(), loadingMap.remove(beanDefinition.getName()));
-//            Object finalInstance = instance;
-//            beanDefinition.getPostMethod().stream().forEach(md -> {
-//                try {
-//                    md.invoke(finalInstance);
-//                } catch (IllegalAccessException e) {
-//                    throw new RuntimeException(e);
-//                } catch (InvocationTargetException e) {
-//                    throw new RuntimeException(e);
-//                }
-//            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -132,9 +117,7 @@ public class ApplicationContext {
         Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
             @Override
             public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-//                System.out.println("get dir file : " + file.toString());
                 Path absolutePath = file.toAbsolutePath();
-//                System.out.println("get dir abs file : " + absolutePath.toString());
                 if (file.toString().endsWith(".class")) {
                     String classFullPath = file.toString().replace(File.separatorChar, '.');
                     int packageIndex = classFullPath.indexOf(packageName);
@@ -151,17 +134,13 @@ public class ApplicationContext {
         return classList;
     }
     public Object getBean(String name) {
-        Object ob = beanDefinitionMap.get(name);
-//        System.out.println("beanDefinitionMap : " + beanDefinitionMap);
-//        System.out.println("iocMap : " + ioc);
-        if (ob != null) {
-            if (ioc.get(name) == null) {
-                ob = createBean((BeanDefinition) ob);
-            } else {
-                ob = ioc.get(name);
-            }
+        if (name == null) return null;
+        Object bean = ioc.get(name);
+        if (bean != null) return bean;
+        if (beanDefinitionMap.containsKey(name)) {
+            return createBean(beanDefinitionMap.get(name));
         }
-        return ob;
+        return null;
     }
 
     public <T> T getBean(Class<T> beanType) {
@@ -176,16 +155,11 @@ public class ApplicationContext {
     }
 
     public <T> List<T> getBeans(Class<T> beanType) {
-        List<BeanDefinition> findBds = beanDefinitionMap.values().stream()
+        return beanDefinitionMap.values().stream()
                 .filter(bd -> beanType.isAssignableFrom(bd.getType()))
+                .map(BeanDefinition::getName)
+                .map(this::getBean)
+                .map((bean) -> (T)bean)
                 .collect(Collectors.toList());
-        List<T> beans = new ArrayList<>();
-        if (findBds != null) {
-            for (BeanDefinition findBd : findBds) {
-                beans.add((T) getBean(findBd.getName()));
-            }
-            return beans;
-        }
-        return null;
     }
 }
