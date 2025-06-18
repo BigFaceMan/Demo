@@ -8,9 +8,9 @@ LLM提供的Api接口参数，提供模型调用外部函数的能力
 
 
 
-# JavaCode
+# impJavaDemo
 
-## IO
+## WebIO
 
 
 
@@ -55,8 +55,10 @@ LLM提供的Api接口参数，提供模型调用外部函数的能力
 
 ## 线程池
 
+- 如何能一直执行你execute的task？-> 生产者消费者模型！（Thread的任务就是一直take你push进来的task
 - 核心Thread 阻塞去读blockqueue中的Runnable task，然后执行
 - 非核心Thread poll 定时读，如果一段时间没读到就结束
+- trade off是  core、queue、max
 - 因此参数有：
   - CoreSize
   - MaxSize
@@ -121,7 +123,11 @@ spring -> MVC
 
 - 自动注入一个服务器
   - Tomcat web服务器，建立请求与servlet的对应关系
-  - 使用一个DispatcherServlet 匹配所有请求，在自己写的类内做路由    创建Servlet（名字与类映射） 、加入Mapping（名字与pattern映射）
+    - 设置连接端口
+    - 设置上下文路径（port后面path前面）与本地路径的映射关系
+    - 设置servlet name 和 servlet的映射关系 （一个context对应一个web应用
+    - 设置path 和 servlet name的映射关系
+  - 使用一个DispatcherServlet 匹配所有请求，在自己写的类内做路由。创建Servlet（名字与类映射） 、加入Mapping（名字与pattern映射）
     - 建立 url 与 servlet（路由内是handler）的对应关系
       - 加入BeanPostConstruct注解，在对象初始化后，将有Controller注解的对象都解析其有没有Handler
       - 如果有RequestMapping，则该方法是一个Handdler，

@@ -99,6 +99,10 @@ public class DispatcherServlet extends HttpServlet implements BeanPostProcessor 
         }
         return args;
     }
+
+    /*
+        寻找所有Controller类中的RequestMapping方法，并生成WebHandler
+     */
     @Override
     public Object afterInitializeBean(Object bean, String beanName) {
         if (bean.getClass().isAnnotationPresent(Controller.class)) {

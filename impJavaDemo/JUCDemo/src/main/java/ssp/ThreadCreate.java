@@ -53,8 +53,7 @@ public class ThreadCreate {
         executorService.execute(() -> {
             System.out.println("线程池创建线程");
         });
-        FutureTask futureTask1 = new FutureTask();
-        futureTask1.cancel();
+
         ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(
                 2, 4, 1, TimeUnit.SECONDS,
                 new ArrayBlockingQueue<>(2),
