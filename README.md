@@ -37,12 +37,17 @@ LLM提供的Api接口参数，提供模型调用外部函数的能力
     - 将要被阻塞的Thread用双向链表存储
     - 利用LockSupport.park() 将Thread阻塞
     - 利用 unlock的时候不改变head节点只做unpark + 两次check 再将Thread park，避免了链表加入节点时非原子操作的问题
-
+      - 每次操作的pipeline：unpark head next node、check cas、switch head、run
+      - node状态有 两个 wait、run
+      - 给第一个执行的节点（直接执行没有建立node）一个虚拟node（Thread 为 null），因此初始情况比较特殊
+      - 并发程序任何执行流都有可能出现（小心！小心！小心！
+        - 要先尝试一次，再park
+          - 否则会出现，头节点在park前 unpark你了，然后就永远睡下去了
+        - 因此尝试的时候还要保证 前一个节点是head（你在队头）、可以cas （前一个节点释放锁了！！！）
 - Time Test
   T: 5
   Thread: 100
   opt: 10
-
 - SpinLock
   ave cost : 397.2
 - AQSLock

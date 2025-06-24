@@ -16,6 +16,7 @@
     <module>AQSImpl</module>
       <module>KafkaDemo</module>
       <module>miniSpring</module>
+      <module>IODemo</module>
   </modules>
 
   <properties>

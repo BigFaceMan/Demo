@@ -3,6 +3,8 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/AQSImpl/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/AQSImpl/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/IODemo/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/IODemo/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/JUCDemo/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/JUCDemo/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/KafkaDemo/src/main/java" charset="UTF-8" />

@@ -1,3 +1,8 @@
+import java.sql.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+
 // 图像接口
 interface Image {
     void display();
@@ -42,12 +47,24 @@ class ProxyImage implements Image {
 // 当ProxyImage的display方法被调用时，它会在需要时创建一个RealImage实例，并调用其display方法。
 public class Proxy {
     public static void main(String[] args) {
-        Image image = new ProxyImage("sample.jpg");
+//        Image image = new ProxyImage("sample.jpg");
+//
+//        // 图像未加载，直到调用display()方法
+//        image.display();
+//
+//        // 图像已加载，无需再次创建
+//        image.display();
 
-        // 图像未加载，直到调用display()方法
-        image.display();
+        String s = "Hello, World!";
+        char[] chs = s.toCharArray();
+        Arrays.sort(chs);
+        String sortedString = new String(chs);
+        ArrayList<Integer> objects = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5));
+        System.out.println(objects);
+        StringBuilder sb = new StringBuilder();
+        sb.append(1);
+        sb.toString();
 
-        // 图像已加载，无需再次创建
-        image.display();
+
     }
 }

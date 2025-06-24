@@ -44,6 +44,19 @@ public class AQSLock implements MyLock {
                 break;
             }
         }
+//        while (true) {
+//            if (current.pre == head.get() && state.compareAndSet(0, 1)) {
+//                head.set(current);
+//                owner = current.t;
+////                    gc
+//                current.pre.next = null;
+//                current.pre = null;
+//                break;
+//            }
+//            LockSupport.park();
+//        }
+
+
         while (true) {
             if (current.pre == head.get() && state.compareAndSet(0, 1)) {
                 head.set(current);
@@ -53,6 +66,7 @@ public class AQSLock implements MyLock {
                 current.pre = null;
                 break;
             }
+
             LockSupport.park();
         }
     }
