@@ -5,7 +5,15 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/SpringBootStarterDemo/threadpool-spring-boot-starter/pom.xml" />
+        <option value="$PROJECT_DIR$/SpringBootStarterDemo/TestStarter/pom.xml" />
+        <option value="$PROJECT_DIR$/SpringBootStarterDemo/sayHello-spring-boot-starter/pom.xml" />
       </list>
+    </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/SpringBootStarterDemo/threadpool-spring-boot-starter/pom.xml" />
+      </set>
     </option>
     <option name="workspaceImportForciblyTurnedOn" value="true" />
   </component>

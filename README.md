@@ -191,6 +191,28 @@ spring -> MVC
 - 虚拟机文件结构, ClassFileStruct
 - 类加载, ClassLoaderTest
 
+## SpringBootStarter
+
+**编写starter**
+
+定义Configuration，在META-INF下写spring.factories 
+
+打包到maven仓库
+
+**使用starter**
+
+pom中写入坐标导入
+
+然后根据条件在代码中编写
+
+springboot 自动注入
+
+- 起步依赖
+- 自动配置
+- 条件注解
+
+
+
 # DesignPattern
 
 23个设计模式

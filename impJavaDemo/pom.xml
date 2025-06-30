@@ -14,9 +14,11 @@
     <module>JUCDemo</module>
     <module>threadPool</module>
     <module>AQSImpl</module>
-      <module>KafkaDemo</module>
-      <module>miniSpring</module>
-      <module>IODemo</module>
+    <module>KafkaDemo</module>
+    <module>miniSpring</module>
+    <module>IODemo</module>
+    <module>TestCode</module>
+      <module>SpringBootStarterDemo</module>
   </modules>
 
   <properties>
