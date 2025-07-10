@@ -3,12 +3,18 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/AQSImpl/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/AQSImpl/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/DProxyDemo/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/DProxyDemo/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/IODemo/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/IODemo/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/JUCDemo/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/JUCDemo/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/JVMDemo/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/JVMDemo/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/KafkaDemo/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/KafkaDemo/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/SpringBootConfigDemo/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/SpringBootConfigDemo/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/SpringBootStarterDemo/TestStarter/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/SpringBootStarterDemo/TestStarter/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/SpringBootStarterDemo/sayHello-spring-boot-starter/src/main/java" charset="UTF-8" />
@@ -17,10 +23,14 @@
     <file url="file://$PROJECT_DIR$/SpringBootStarterDemo/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/SpringBootStarterDemo/threadpool-spring-boot-starter/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/SpringBootStarterDemo/threadpool-spring-boot-starter/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/SpringDemo/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/SpringDemo/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/TestCode/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/TestCode/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/miniSpring/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/miniSpring/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/mybatisDemo/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/mybatisDemo/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/threadPool/src/main/java" charset="UTF-8" />

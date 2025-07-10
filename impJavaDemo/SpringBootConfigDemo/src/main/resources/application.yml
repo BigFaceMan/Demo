@@ -1,0 +1,48 @@
+server:
+  port: 8088
+
+user:
+  name: ssp
+  age: 18
+  phone: 123456
+
+# 单redis 配置示例
+#spring:
+#  redis:
+#    host: localhost
+#    port: 6379
+#    password: 123456
+#    database: 10
+
+
+# redis 一主两从
+spring:
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password: 123456
+    lettuce:
+      read-from: replica-preferred
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3306/test?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 50
+      minimum-idle: 10
+      idle-timeout: 30000
+      max-lifetime: 1800000
+      connection-timeout: 30000
+# redis集群配置示例
+#spring:
+#  redis:
+#    password: 123456 # 你配置的 Redis 密码
+#    cluster:
+#      nodes:
+#        - 127.0.0.1:6379
+#        - 127.0.0.1:6380
+#        - 127.0.0.1:6381
+#      max-redirects: 3
+#    lettuce:
+#      read-from: replica-preferred

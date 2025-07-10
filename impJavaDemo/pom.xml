@@ -19,6 +19,10 @@
     <module>IODemo</module>
     <module>TestCode</module>
       <module>SpringBootStarterDemo</module>
+      <module>JVMDemo</module>
+      <module>DProxyDemo</module>
+    <module>SpringDemo</module>
+      <module>mybatisDemo</module>
   </modules>
 
   <properties>
