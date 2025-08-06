@@ -1,4 +1,4 @@
-package ssp;
+package ssp.nio;
 
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;

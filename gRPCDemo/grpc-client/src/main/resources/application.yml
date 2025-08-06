@@ -1,0 +1,14 @@
+grpc:
+  client:
+    grpc-server:
+      # gRPC服务端地址
+      address: static://localhost:8001
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext
+spring:
+  application:
+    name: grpc-client
+server:
+  port: 9001
+

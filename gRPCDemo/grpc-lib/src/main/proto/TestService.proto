@@ -1,0 +1,24 @@
+// 基于proto3版本
+syntax = "proto3";
+
+option java_multiple_files = true;
+// 生成java代码的包路径
+option java_package = "org.example.rpc";
+
+// grpc服务
+service TestService{
+  // 一个查询接口
+  rpc CheckUser(ApiIn) returns (ApiOut) {}
+}
+// 定义接口入参数
+message ApiIn{
+  string name = 1;
+  string code = 2;
+  int64 age =3;
+}
+// 定义接口返回参数
+message ApiOut {
+  bool success = 1;
+  string auth=2;
+}
+

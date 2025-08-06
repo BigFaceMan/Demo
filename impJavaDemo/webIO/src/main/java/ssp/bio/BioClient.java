@@ -1,4 +1,4 @@
-package ssp;
+package ssp.bio;
 
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
